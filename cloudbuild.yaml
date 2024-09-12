@@ -29,6 +29,9 @@ steps:
     --machine-type=e2-medium \
     --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
     --image-family=ubuntu-2004-focal-v20240830 \
+    --image-project=ubuntu-os-cloud \
+    --boot-disk-type=pd-balanced \
+    --boot-disk-size=10GB \
     --metadata=startup-script-url=gs://pikachu1/startup.sh \
     --tags=http-server
 
