@@ -33,7 +33,7 @@ steps:
     --image-project=ubuntu-os-cloud \
     --boot-disk-type=pd-balanced \
     --boot-disk-size=10GB \
-    --metadata=startup-script-url=gs://pikachu1/startupscript.sh \
+    --metadata=startup-script-url=gs://pikachu1/startupscript.sh,IMAGE_TAG=$SHORT_SHA \
     --tags=http-server
 
    
