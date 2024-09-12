@@ -14,11 +14,11 @@ steps:
 
   # Step 1: Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest', '.']
+  args: ['build', '-t', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA', '.']
 
   # Step 2: Push the Docker image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest']
+  args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA']
 
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
@@ -33,11 +33,10 @@ steps:
     --image-project=ubuntu-os-cloud \
     --boot-disk-type=pd-balanced \
     --boot-disk-size=10GB \
+    --metadata=IMAGE_TAG=$SHORT_SHA \
     --metadata=startup-script-url=gs://pikachu1/startup.sh \
     --tags=http-server
 
-images:
-  - 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY  
