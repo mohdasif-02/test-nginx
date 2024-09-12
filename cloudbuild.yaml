@@ -20,6 +20,18 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest']
 
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gcloud compute instance-templates create nginx-template \
+    --machine-type=e2-medium \
+    --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
+    --image-family=ubuntu-2004-lts \
+    --metadata=startup-script-url=gs://pikachu1/startup.sh \
+    --tags=http-server
+
 images:
   - 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest'
 
