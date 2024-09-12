@@ -23,4 +23,7 @@ steps:
 images:
   - 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:latest'
 
+options:
+  logging: CLOUD_LOGGING_ONLY  
+
   
