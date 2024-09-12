@@ -36,6 +36,31 @@ steps:
     --metadata=startup-script-url=gs://pikachu1/startupscript.sh \
     --tags=http-server
 
+   # Step 4: Create a Managed Instance Group using the instance template
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud compute instance-groups managed create nginx-mig \
+          --base-instance-name=nginx-instance \
+          --template=nginx-template \
+          --size=1 \
+          --zone=asia-south1-a
+
+  # Step 5: Configure Autoscaling for the Managed Instance Group
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud compute instance-groups managed set-autoscaling nginx-mig \
+          --zone=asia-south1-a \
+          --max-num-replicas=2 \
+          --min-num-replicas=1 \
+          --target-cpu-utilization=0.6 \
+          --cool-down-period=60 
+
 
 options:
   logging: CLOUD_LOGGING_ONLY  
