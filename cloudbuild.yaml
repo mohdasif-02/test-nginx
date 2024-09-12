@@ -28,7 +28,7 @@ steps:
     gcloud compute instance-templates create nginx-template \
     --machine-type=e2-medium \
     --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
-    --image-family=Ubuntu 20.04 LTS \
+    --image-family=Ubuntu-20.04-LTS \
     --image-project=ubuntu-os-cloud \
     --boot-disk-type=pd-balanced \
     --boot-disk-size=10GB \
