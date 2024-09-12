@@ -7,8 +7,7 @@ steps:
   # - |
   #   set -e  # Ensure the script exits on any error
   #   gcloud config set project asif-praveen-gke
-  #   gcloud config set compute/zone asia-south1-a
-	
+  #   gcloud config set compute/zone asia-south1-a	
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/asif0257/test-nginx.git', '.']
   dir: /app
