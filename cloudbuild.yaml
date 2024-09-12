@@ -37,14 +37,14 @@ steps:
     --tags=http-server
 
     # Step 3: Perform a rolling update on the MIG with the new template
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud compute instance-groups managed rolling-action start-update nginx-mig \
-        --version=template=nginxupdate \
-        --zone=asia-south1-a 
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gcloud compute instance-groups managed rolling-action start-update nginx-mig \
+    --version=template=nginxupdate \
+    --zone=asia-south1-a 
 
    
 # - name: 'gcr.io/cloud-builders/gcloud'
