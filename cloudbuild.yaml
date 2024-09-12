@@ -34,7 +34,7 @@ steps:
     --boot-disk-type=pd-balanced \
     --boot-disk-size=10GB \
     # --metadata=IMAGE_TAG=$SHORT_SHA \
-    --metadata=startup-script-url=gs://pikachu1/startup.sh.txt, IMAGE_TAG=$SHORT_SHA \
+    --metadata=startup-script-url=gs://pikachu1/startupscript.sh, IMAGE_TAG=$SHORT_SHA \
     --tags=http-server
 
 
