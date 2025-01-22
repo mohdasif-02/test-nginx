@@ -1,78 +1,78 @@
-steps:
+# steps:
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    set -e  # Ensure the script exits on any error
-    gcloud config set project asif-praveen-gke
-    gcloud config set compute/zone asia-south1-a	
-- name: 'gcr.io/cloud-builders/git'
-  args: ['clone', 'https://github.com/asif0257/test-nginx.git', '.']
-  dir: /app
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     set -e  # Ensure the script exits on any error
+#     gcloud config set project asif-praveen-gke
+#     gcloud config set compute/zone asia-south1-a	
+# - name: 'gcr.io/cloud-builders/git'
+#   args: ['clone', 'https://github.com/asif0257/test-nginx.git', '.']
+#   dir: /app
 
-  # Step 1: Build the Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA', '.']
+#   # Step 1: Build the Docker image
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA', '.']
 
-  # Step 2: Push the Docker image to Artifact Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA']
+#   # Step 2: Push the Docker image to Artifact Registry
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'asia-south1-docker.pkg.dev/asif-praveen-gke/nginx/nginx-sample:$SHORT_SHA']
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud compute instance-templates create nginxupdate \
-    --machine-type=e2-medium \
-    --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
-    --subnet=projects/asif-praveen-gke/regions/asia-south1/subnetworks/siri-subnet-1 \
-    --image-family=ubuntu-2004-lts \
-    --image-project=ubuntu-os-cloud \
-    --boot-disk-type=pd-balanced \
-    --boot-disk-size=10GB \
-    --metadata=startup-script-url=gs://pikachu1/startupscript.sh,IMAGE_TAG=$SHORT_SHA \
-    --tags=http-server
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     gcloud compute instance-templates create nginxupdate \
+#     --machine-type=e2-medium \
+#     --network=projects/asif-praveen-gke/global/networks/siri-vpc-network \
+#     --subnet=projects/asif-praveen-gke/regions/asia-south1/subnetworks/siri-subnet-1 \
+#     --image-family=ubuntu-2004-lts \
+#     --image-project=ubuntu-os-cloud \
+#     --boot-disk-type=pd-balanced \
+#     --boot-disk-size=10GB \
+#     --metadata=startup-script-url=gs://pikachu1/startupscript.sh,IMAGE_TAG=$SHORT_SHA \
+#     --tags=http-server
 
-    # Step 3: Perform a rolling update on the MIG with the new template
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud compute instance-groups managed rolling-action start-update nginx-mig \
-    --version=template=nginxupdate \
-    --zone=asia-south1-a 
+#     # Step 3: Perform a rolling update on the MIG with the new template
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     gcloud compute instance-groups managed rolling-action start-update nginx-mig \
+#     --version=template=nginxupdate \
+#     --zone=asia-south1-a 
 
    
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   entrypoint: 'bash'
-#   args:
-#   - '-c'
-#   - |
-#     gcloud compute instance-groups managed create nginx-mig \
-#     --base-instance-name=nginx-instance \
-#     --template=nginx-template \
-#     --size=1 \
-#     --zone=asia-south1-a
+# # - name: 'gcr.io/cloud-builders/gcloud'
+# #   entrypoint: 'bash'
+# #   args:
+# #   - '-c'
+# #   - |
+# #     gcloud compute instance-groups managed create nginx-mig \
+# #     --base-instance-name=nginx-instance \
+# #     --template=nginx-template \
+# #     --size=1 \
+# #     --zone=asia-south1-a
 
-#   # Step 5: Configure Autoscaling for the Managed Instance Group
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   entrypoint: 'bash'
-#   args:
-#   - '-c'
-#   - |
-#     gcloud compute instance-groups managed set-autoscaling nginx-mig \
-#     --zone=asia-south1-a \
-#     --max-num-replicas=2 \
-#     --min-num-replicas=1 \
-#     --target-cpu-utilization=0.6 \
-#     --cool-down-period=60 
+# #   # Step 5: Configure Autoscaling for the Managed Instance Group
+# # - name: 'gcr.io/cloud-builders/gcloud'
+# #   entrypoint: 'bash'
+# #   args:
+# #   - '-c'
+# #   - |
+# #     gcloud compute instance-groups managed set-autoscaling nginx-mig \
+# #     --zone=asia-south1-a \
+# #     --max-num-replicas=2 \
+# #     --min-num-replicas=1 \
+# #     --target-cpu-utilization=0.6 \
+# #     --cool-down-period=60 
 
 
-options:
-  logging: CLOUD_LOGGING_ONLY  
+# options:
+#   logging: CLOUD_LOGGING_ONLY  
 
   
